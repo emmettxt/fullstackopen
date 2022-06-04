@@ -56,9 +56,11 @@ const App = () => {
   const [allCountries, setAllCountries] =useState([])
   const handleFilterChange = (event) => {
     setFilter(event.target.value)
+    let lowerfilter = event.target.value.toLowerCase()
     setCountries(
       allCountries.filter(country => 
-        country.name.official.includes(filter) || country.name.common.includes(filter)
+        country.name.official.toLowerCase().includes(lowerfilter) || 
+        country.name.common.toLowerCase().includes(lowerfilter)
     ))
   }
   
