@@ -6,11 +6,11 @@ test('dummy returns one', () => {
   const result = listHelper.dummy(blogs)
   expect(result).toBe(1)
 })
-describe('totalLikes', ()=>{
-  test('of empty list is zero',()=>{
+describe('totalLikes', () => {
+  test('of empty list is zero',() => {
     expect(listHelper.totalLikes([])).toBe(0)
   })
-  test('when list has only one blog equals the likes of that',()=>{
+  test('when list has only one blog equals the likes of that',() => {
     const listWithOneBlog = [
       {
         _id: '5a422aa71b54a676234d17f8',
@@ -24,7 +24,7 @@ describe('totalLikes', ()=>{
     expect(listHelper.totalLikes(listWithOneBlog)).toBe(listWithOneBlog[0].likes)
   })
 
-  test('of a bigger list is calculated right',()=>{
+  test('of a bigger list is calculated right',() => {
     const biggerListOfBlogs = [
       {
         _id: '5a422aa71b54a676234d17f8',
@@ -70,8 +70,8 @@ describe('totalLikes', ()=>{
   })
 })
 
-describe('favouriteBlog', ()=>{
-  test('mostliked of several blogs',()=>{
+describe('favouriteBlog', () => {
+  test('mostliked of several blogs',() => {
     const biggerListOfBlogs = [
       {
         _id: '5a422aa71b54a676234d17f8',
@@ -115,14 +115,14 @@ describe('favouriteBlog', ()=>{
     ]
     expect(listHelper.favoriteBlog(biggerListOfBlogs)).toEqual(biggerListOfBlogs[1])
   })
-  test('empty list returns nothing',()=>{
+  test('empty list returns nothing',() => {
     expect(listHelper.favoriteBlog([])).toBe()
   })
 })
 
 
-describe('mostBlogs', ()=>{
-  test('mostBlogs of several blogs',()=>{
+describe('mostBlogs', () => {
+  test('mostBlogs of several blogs',() => {
     const biggerListOfBlogs = [
       {
         _id: '5a422aa71b54a676234d17f8',
@@ -166,13 +166,13 @@ describe('mostBlogs', ()=>{
     ]
     const result = listHelper.mostBlogs(biggerListOfBlogs)
     console.log('Result: ',result)
-    expect(result).toEqual({author: 'Edsger W. Dijkstra', count: 4})
+    expect(result).toEqual({ author: 'Edsger W. Dijkstra', count: 4 })
   })
 })
 
 
-describe('mostLikes', ()=>{
-  test('most likes of several blogs',()=>{
+describe('mostLikes', () => {
+  test('most likes of several blogs',() => {
     const biggerListOfBlogs = [
       {
         _id: '5a422aa71b54a676234d17f8',
@@ -215,9 +215,9 @@ describe('mostLikes', ()=>{
       }
     ]
     const result = listHelper.mostLikes(biggerListOfBlogs)
-    expect(result).toEqual({author: 'Edsger W. Dijkstra', likes: 15})
+    expect(result).toEqual({ author: 'Edsger W. Dijkstra', likes: 15 })
   })
-  test('two authors with same likes',()=>{
+  test('two authors with same likes',() => {
     const twoBlogsSameLikes = [
       {
         _id: '5a422aa71b54a676234d17f8',
@@ -237,6 +237,6 @@ describe('mostLikes', ()=>{
       },
     ]
     const result = listHelper.mostLikes(twoBlogsSameLikes)
-    expect(result).toEqual({author: 'Edsger W. Dijkstra', likes: 5})
+    expect(result).toEqual({ author: 'Edsger W. Dijkstra', likes: 5 })
   })
 })

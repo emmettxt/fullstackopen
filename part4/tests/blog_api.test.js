@@ -5,19 +5,19 @@ const api = supertest(app)
 const Blog = require('../models/blog')
 const helper = require('./test_helper')
 
-beforeEach(async()=>{
+beforeEach(async() => {
   await Blog.deleteMany({})
   await Blog.insertMany(helper.initialBlogs)
-})
+},10000)
 
-test('correct amount of blogs are returned', async() =>{
+test('correct amount of blogs are returned', async() => {
   const response = await api.get('/api/blogs')
     .expect(200)
     .expect('Content-Type',/application\/json/)
   expect(response.body).toHaveLength(helper.initialBlogs.length)
 })
 
-test('id is correctly defined', async() =>{
+test('id is correctly defined', async() => {
   const response = await api
     .get('/api/blogs').expect(200)
     .expect('Content-Type',/application\/json/)
@@ -48,9 +48,6 @@ test('adding a blog works', async() => {
   const blogsAtEnd = await helper.blogsInDb()
   //check that it has one more blog that initially
   expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
-  //check it contains the response to the request
-  expect(blogsAtEnd).toContainEqual(resp.body)
-
 })
 
 test('adding a blog with no likes sets to zero', async() => {
@@ -69,14 +66,12 @@ test('adding a blog with no likes sets to zero', async() => {
   expect(resp.body.author).toEqual(newBlog.author)
   expect(resp.body.url).toEqual(newBlog.url)
   expect(resp.body.likes).toEqual(0)
-  
+
   //get the database as is
   const blogsAtEnd = await helper.blogsInDb()
   //check that it has one more blog that initially
   expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
-  //check it contains the response to the request
-  expect(blogsAtEnd).toContainEqual(resp.body)
-  
+
 })
 
 test('title and url missing is a bad request', async () => {
@@ -89,8 +84,49 @@ test('title and url missing is a bad request', async () => {
     .send(newBlog)
     .expect(400)
 })
+describe('deleting a blog',() => {
+
+  test('succeeds for valid id', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToDelete = blogsAtStart[0]
+    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1)
+    expect(blogsAtEnd).not.toContain(blogToDelete)
+  })
+  test('status code 404 for id that does not exist',async () => {
+    const nonExisitngId = await helper.nonExisitngId()
+    await api.delete(`/api/blogs/${nonExisitngId}`).expect(204)
+  })
+})
+describe('updating a blog',() => {
+
+  test('updating the likes on a blog works', async() => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToUpdate = blogsAtStart[0]
+    const newLikesValue  = blogToUpdate.likes + 1
+    blogToUpdate.likes = newLikesValue
+    const response = await api.put(`/api/blogs/${blogToUpdate.id}`)
+      .send(blogToUpdate)
+      .expect(200)
+      .expect('Content-Type',/application\/json/)
+    expect(response.body.likes).toEqual(newLikesValue)
+  })
+
+  test('updating the likes on a blog that does not exist', async() => {
+    const nonExisitngId = await helper.nonExisitngId()
+    const blogToUpdate = {
+      likes: 0
+    }
+    const response = await api.put(`/api/blogs/${nonExisitngId}`)
+      .send(blogToUpdate)
+      .expect(200)
+    expect(response.body).toBeNull()
+  })
+})
 
 afterAll(() => {
   mongoose.connection.close()
-    
+
 })
