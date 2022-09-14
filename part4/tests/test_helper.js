@@ -53,9 +53,16 @@ const createTestUser = async () => {
   await user.save()
   return user
 }
-const getValidToken = async (user) => {
-
-  return await jwt.sign(user, process.env.SECRET)
+const getValidToken = async () => {
+  const user = await createTestUser()
+  return getValidTokenForUser(user)
+}
+const getValidTokenForUser = async(user) => {
+  const userForToken = {
+    username : user.username,
+    id: user._id
+  }
+  return await jwt.sign(userForToken, process.env.SECRET)
 }
 module.exports = {
   initialBlogs,
@@ -64,5 +71,6 @@ module.exports = {
   usersInDb,
   initialUser,
   createTestUser,
-  getValidToken
+  getValidToken,
+  getValidTokenForUser
 }
