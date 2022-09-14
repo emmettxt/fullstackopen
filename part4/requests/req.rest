@@ -29,3 +29,12 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb
     "url":"url2",
     "likes":"2"
 }
+
+###
+PUT http://localhost:3005/api/blogs/631df6dbface3f04ac4c3eb0
+content-type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjYzMWFmYjQ1MTE2ZDIzNGZlN2U3ZTQ0YSIsImlhdCI6MTY2MjkwOTQ1OX0.Ej0u3EoAHa8XDHZFpKIlRFbKCvndJ_Il6APOxvYorPs
+
+{
+    "likes": 23
+}

@@ -14,7 +14,7 @@ blogRouter.post('/', userExtractor,async (request, response) => {
 
   //check url and title are in request body
   if(!request.body.title || !request.body.url){
-    response.status(400).send()
+    response.status(400).json({ error: 'blog requires a title and a url' }).send()
     return
   }
   //if no likes given then set to 0
@@ -36,7 +36,10 @@ blogRouter.delete('/:id',userExtractor,async(req,res) => {
 
   const user = req.user
   const blog = await Blog.findById(req.params.id)
-  if(blog && user.id.toString() === blog.user.toString()){
+  if(user.id.toString() !== blog.user.toString()){
+    return res.status(401).end()
+  }
+  if(blog){
     user.blogs.filter( b => b.toString() !== blog._id)
     await user.save()
     await blog.remove()
