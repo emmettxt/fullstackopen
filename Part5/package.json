@@ -5,6 +5,7 @@
   "dependencies": {
     "@testing-library/user-event": "^14.1.1",
     "axios": "^0.27.2",
+    "cross-env": "^7.0.3",
     "prop-types": "^15.8.1",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
@@ -12,11 +13,12 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "cross-env PORT=3002 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "eslint": "eslint ."
+    "eslint": "eslint .",
+    "cypress:open": "cypress open"
   },
   "eslintConfig": {
     "extends": [
@@ -40,6 +42,8 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
+    "cypress": "^10.7.0",
+    "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-jest": "^27.0.4"
   }
 }

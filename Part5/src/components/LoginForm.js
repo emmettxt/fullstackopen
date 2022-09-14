@@ -1,12 +1,12 @@
 const LoginForm = ({ username, password, handleLogin, setUsername, setPassword }) => (
-  <form onSubmit={handleLogin}>
+  <form onSubmit={handleLogin} id="login-form">
     <div>
       <h1>log in to application</h1>
       username
       <input
         type="text"
         value={username}
-        name="Username"
+        name="username"
         onChange={({ target }) => setUsername(target.value)}
       />
     </div>
@@ -15,7 +15,7 @@ const LoginForm = ({ username, password, handleLogin, setUsername, setPassword }
       <input
         type="password"
         value={password}
-        name="Password"
+        name="password"
         onChange={({ target }) => setPassword(target.value)}
       />
     </div>

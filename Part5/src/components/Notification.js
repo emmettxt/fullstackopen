@@ -10,7 +10,7 @@ const Notification = ({ message, isGood }) => {
       marginBottom: 10
     }
     return (
-      <div style={notifcationStyle}>
+      <div style={notifcationStyle} id="notification">
         {message}
       </div>)
   } else return null

@@ -25,7 +25,7 @@ const Blog = ({ blog, updateLike, deleteBlog, isCurrentUsers }) => {
   }
 
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className="blog">
       <div>
         {blog.title} {blog.author}
         <button onClick={toggleExpand}>
