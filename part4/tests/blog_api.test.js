@@ -6,8 +6,14 @@ const Blog = require('../models/blog')
 const helper = require('./test_helper')
 
 beforeEach(async() => {
+  const user = await helper.createTestUser()
   await Blog.deleteMany({})
-  await Blog.insertMany(helper.initialBlogs)
+  helper.initialBlogs.forEach( async (blog) => {
+    blog.user = user._id
+    let blogObject = new Blog(blog)
+    await blogObject.save()
+  })
+  // await Blog.insertMany(helper.initialBlogs)
 },10000)
 
 test('correct amount of blogs are returned', async() => {
@@ -25,64 +31,80 @@ test('id is correctly defined', async() => {
   expect(response.body[0].id).toBeDefined()
 
 })
+describe('adding blogs',() => {
 
-test('adding a blog works', async() => {
-  const newBlog =  {
-    'title': 'new Blog Title 1',
-    'author': 'new Blog Author 1',
-    'url': 'new Blog Url 1',
-    'likes': 50
-  }
-  const resp = await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(201)
-    .expect('Content-Type',/application\/json/)
-  //the following checks the content of the response is the same at the request
-  expect(resp.body.title).toEqual(newBlog.title)
-  expect(resp.body.author).toEqual(newBlog.author)
-  expect(resp.body.url).toEqual(newBlog.url)
-  expect(resp.body.likes).toEqual(newBlog.likes)
-
-  //get the database as is
-  const blogsAtEnd = await helper.blogsInDb()
-  //check that it has one more blog that initially
-  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
-})
-
-test('adding a blog with no likes sets to zero', async() => {
-  const newBlog =  {
-    'title': 'new Blog Title 1',
-    'author': 'new Blog Author 1',
-    'url': 'new Blog Url 1'
-  }
-  const resp = await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(201)
-    .expect('Content-Type',/application\/json/)
+  test('adding a blog works', async() => {
+    const user = await helper.createTestUser()
+    const userForToken = {
+      username : user.username,
+      id: user._id
+    }
+    const token = await helper.getValidToken(userForToken)
+    const newBlog =  {
+      'title': 'new Blog Title 1',
+      'author': 'new Blog Author 1',
+      'url': 'new Blog Url 1',
+      'likes': 50
+    }
+    const resp = await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .set('Authorization' , `bearer ${token}`)
+      .expect(201)
+      .expect('Content-Type',/application\/json/)
     //the following checks the content of the response is the same at the request
-  expect(resp.body.title).toEqual(newBlog.title)
-  expect(resp.body.author).toEqual(newBlog.author)
-  expect(resp.body.url).toEqual(newBlog.url)
-  expect(resp.body.likes).toEqual(0)
+    expect(resp.body.title).toEqual(newBlog.title)
+    expect(resp.body.author).toEqual(newBlog.author)
+    expect(resp.body.url).toEqual(newBlog.url)
+    expect(resp.body.likes).toEqual(newBlog.likes)
 
-  //get the database as is
-  const blogsAtEnd = await helper.blogsInDb()
-  //check that it has one more blog that initially
-  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+    //get the database as is
+    const blogsAtEnd = await helper.blogsInDb()
+    //check that it has one more blog that initially
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+  })
 
-})
+  test('adding a blog with no likes sets to zero', async() => {
+    const user = await helper.createTestUser()
+    const userForToken = {
+      username : user.username,
+      id: user._id
+    }
+    const token = await helper.getValidToken(userForToken)
+    const newBlog =  {
+      'title': 'new Blog Title 1',
+      'author': 'new Blog Author 1',
+      'url': 'new Blog Url 1'
+    }
+    const resp = await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .set('Authorization' , `bearer ${token}`)
+      .expect(201)
+      .expect('Content-Type',/application\/json/)
+    //the following checks the content of the response is the same at the request
+    expect(resp.body.title).toEqual(newBlog.title)
+    expect(resp.body.author).toEqual(newBlog.author)
+    expect(resp.body.url).toEqual(newBlog.url)
+    expect(resp.body.likes).toEqual(0)
 
-test('title and url missing is a bad request', async () => {
-  const newBlog =  {
-    'author': 'new Blog Author 1',
-    'likes': 3
-  }
-  await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(400)
+    //get the database as is
+    const blogsAtEnd = await helper.blogsInDb()
+    //check that it has one more blog that initially
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+
+  })
+
+  test('title and url missing is a bad request', async () => {
+    const newBlog =  {
+      'author': 'new Blog Author 1',
+      'likes': 3
+    }
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
+  })
 })
 describe('deleting a blog',() => {
 
