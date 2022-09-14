@@ -150,12 +150,15 @@ const App = () => {
           </Togglable>
 
           {blogs.map(blog =>
-            <Blog 
-              key={blog.id} 
-              blog={blog} 
-              updateLike={handleLike} 
+            <Blog
+              key={blog.id}
+              blog={blog}
+              updateLike={handleLike}
               deleteBlog={handleDeleteBlog}
-              isCurrentUsers={blog.user?.id === user.id} />
+              isCurrentUsers={
+                blog.user?
+                  blog.user.id === user.id
+                  : false} />
           )}
         </div>
       }

@@ -28,7 +28,7 @@ const update = async (id, newObject) => {
   const response = await axios.put(`${baseUrl}/${id}`, newObject, config)
   return response.data
 }
-const remove = async(id) =>{
+const remove = async(id) => {
   const resp = await axios.delete(`${baseUrl}/${id}`,authConfig)
   return resp
 }
