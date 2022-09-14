@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import Proptypes from 'prop-types'
+
 const Blog = ({ blog, updateLike, deleteBlog, isCurrentUsers }) => {
   const [isExpanded, setIsExpaned] = useState(false)
   const showWhenExpanded = { display: isExpanded ? '' : 'none' }
@@ -47,6 +49,12 @@ const Blog = ({ blog, updateLike, deleteBlog, isCurrentUsers }) => {
       </div>
     </div>
   )
+}
+Blog.propTypes = {
+  blog: Proptypes.object.isRequired,
+  updateLike: Proptypes.func.isRequired,
+  deleteBlog: Proptypes.func.isRequired,
+  isCurrentUsers: Proptypes.bool.isRequired
 }
 
 export default Blog
