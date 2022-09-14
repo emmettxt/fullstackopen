@@ -15,13 +15,13 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
-  const [notificationMessage, setNotificationMessage] =useState(null)
-  const setNotificationMessageWithTimeout = (message,isGood) =>{
+  const [notificationMessage, setNotificationMessage] = useState(null)
+  const setNotificationMessageWithTimeout = (message, isGood) => {
     setNotificationMessage(message)
     setNotificationIsGood(isGood)
-    setTimeout(()=>setNotificationMessage(null), 5000)
+    setTimeout(() => setNotificationMessage(null), 5000)
   }
-  const [notificationIsGood,setNotificationIsGood] =useState(true)
+  const [notificationIsGood, setNotificationIsGood] = useState(true)
 
   const handleNewNameChange = (event) => setNewName(event.target.value)
   const handleNewNumberChange = (event) => setNewNumber(event.target.value)
@@ -29,29 +29,34 @@ const App = () => {
   const handleAddName = (event) => {
     event.preventDefault()
 
-    const personObject = { name: newName, number: newNumber}
-    const exisitngPerson = persons.find(p =>p.name === newName)
+    const personObject = { name: newName, number: newNumber }
+    const exisitngPerson = persons.find(p => p.name === newName)
     if (exisitngPerson) {
-      if(window.confirm(`${newName} is already in the phone book, replace the old number wiht new one?`)){
+      if (window.confirm(`${newName} is already in the phone book, replace the old number wiht new one?`)) {
 
         phonebookService
-          .update(exisitngPerson.id,personObject)
+          .update(exisitngPerson.id, personObject)
           .then(
-            retunrnedPersonObject =>{
-            setPersons(persons.map(p=>p.id !== exisitngPerson.id ? p: retunrnedPersonObject))
-            setNotificationMessageWithTimeout(`Updated ${newName}`,true)
+            retunrnedPersonObject => {
+              setPersons(persons.map(p => p.id !== exisitngPerson.id ? p : retunrnedPersonObject))
+              setNotificationMessageWithTimeout(`Updated ${newName}`, true)
+              setNewName('')
+              setNewNumber('')
+
             }
           )
+          .catch(err => setNotificationMessageWithTimeout(err.response.data.error, false))
       }
     } else {
       phonebookService
         .create(personObject)
         .then(returnedPersonObject => {
           setPersons(persons.concat(returnedPersonObject))
-          setNotificationMessageWithTimeout(`Added ${newName}`,true)
+          setNotificationMessageWithTimeout(`Added ${newName}`, true)
           setNewName('')
           setNewNumber('')
         })
+        .catch(err => setNotificationMessageWithTimeout(err.response.data.error, false))
     }
 
 
@@ -64,9 +69,9 @@ const App = () => {
           setPersons(
             persons.filter(person => person.id !== personToDelete.id)
           )
-          
-          setNotificationMessageWithTimeout(`Deleted ${personToDelete.name}`,true)
-        }).catch(_ =>{
+
+          setNotificationMessageWithTimeout(`Deleted ${personToDelete.name}`, true)
+        }).catch(_ => {
           setNotificationMessageWithTimeout(
             `Information of ${personToDelete.name} has already been removed from the server`,
             false
@@ -85,7 +90,7 @@ const App = () => {
     <div>
 
       <h2>Phonebook</h2>
-      <Notification message={notificationMessage} isGood={notificationIsGood}/>
+      <Notification message={notificationMessage} isGood={notificationIsGood} />
       <Filter filter={filter} handleFilter={handleFilter} />
       <h2>add a new</h2>
       <PersonForm
