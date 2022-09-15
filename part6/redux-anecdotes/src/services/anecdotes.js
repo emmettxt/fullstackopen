@@ -15,5 +15,5 @@ const createNew = async(content) =>{
   return resp.data
 }
 
-const anecdotes = { getAll, createNew }
-export default anecdotes
+const anecdoteService = { getAll, createNew }
+export default anecdoteService
