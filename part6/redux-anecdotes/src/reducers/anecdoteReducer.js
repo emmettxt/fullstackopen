@@ -51,13 +51,13 @@ export const initializeAnecdotes = () => {
 export const createAnecdote = content => {
   return async dispatch => {
     const newAnecdote = await anecdoteService.createNew(content)
-    return dispatch(appendAnecdote(newAnecdote))
+    dispatch(appendAnecdote(newAnecdote))
   }
 }
 export const voteAnecdote = anecdote => {
   return async dispatch =>{
     const updatedAnecdote = await anecdoteService.addVote(anecdote)
-    return dispatch(updateAnecdote(updatedAnecdote))
+    dispatch(updateAnecdote(updatedAnecdote))
   }
 
 }
