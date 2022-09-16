@@ -30,7 +30,7 @@ const AnecdoteList = ({ anecdotes }) => (
     <ul>
       {anecdotes.map(anecdote =>
         <li key={anecdote.id} >
-          <Link to={`/anecdote/${anecdote.id}`}>
+          <Link to={`/anecdotes/${anecdote.id}`}>
             {anecdote.content}
           </Link>
         </li>
@@ -65,9 +65,11 @@ const CreateNew = (props) => {
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
+  const navigate = useNavigate()
 
 
   const handleSubmit = (e) => {
+
     e.preventDefault()
     props.addNew({
       content,
@@ -75,6 +77,7 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    navigate(`/`)
   }
 
   return (
@@ -103,7 +106,7 @@ const Anecdote = ({ anecdotes }) => {
   const id = useParams().id
   const anecdote = anecdotes.find(a => a.id === Number(id))
 
-  return(
+  return (
     <div>
       <h3>{anecdote.content} by {anecdote.author}</h3>
       has {anecdote.votes} votes
@@ -134,6 +137,10 @@ const App = () => {
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
     setAnecdotes(anecdotes.concat(anecdote))
+    setNotification(`a new anecdote ${anecdote.content} created!`)
+    setTimeout(
+      () =>  setNotification(''),5000
+    )
   }
 
   const anecdoteById = (id) =>
@@ -155,11 +162,12 @@ const App = () => {
       <div>
         <h1>Software anecdotes</h1>
         <Menu />
+        {notification ? notification : null}
         <Routes>
           <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />}></Route>
           <Route path="/create" element={<CreateNew addNew={addNew} />}></Route>
           <Route path="/about" element={<About />}></Route>
-          <Route path="/anecdote/:id" element={<Anecdote anecdotes={anecdotes}/>}></Route>
+          <Route path="/anecdotes/:id" element={<Anecdote anecdotes={anecdotes} />}></Route>
 
         </Routes>
         <Footer />
