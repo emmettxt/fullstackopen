@@ -10,7 +10,8 @@ import { createBlog, initializeBlogs } from './reducers/blogReducer'
 import {
   showNotification,
 } from './reducers/notificationReducer'
-import { initializeUser, logoutUser } from './reducers/userRedcuer'
+import { initializeUser } from './reducers/userRedcuer'
+import LogoutButton from './components/LogoutButton'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -19,9 +20,6 @@ const App = () => {
     dispatch(initializeUser())
   }, [dispatch])
   const user = useSelector(state => state.user)
-  const handleLogout = () => {
-    dispatch(logoutUser())
-  }
 
   const handleCreateBlog = async blogObject => {
     try {
@@ -52,7 +50,8 @@ const App = () => {
           <h2>blogs</h2>
           <p>
             {user.name} logged-in
-            <button onClick={handleLogout}>logout</button>
+            {/* <button onClick={handleLogout}>logout</button> */}
+            <LogoutButton/>
           </p>
           <Togglable buttonLabel="new blog">
             <BlogForm createBlog={handleCreateBlog} />
