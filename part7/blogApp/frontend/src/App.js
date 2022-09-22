@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react'
-import Blog from './components/Blog'
+import Blogs from './components/Blogs'
+
 import blogService from './services/blogs'
 import loginService from './services/login'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
-import { useDispatch, useSelector } from 'react-redux'
-import { createBlog, deleteBlog, initializeBlogs, updateBlog } from './reducers/blogReducer'
+import { useDispatch } from 'react-redux'
+import { createBlog, initializeBlogs } from './reducers/blogReducer'
 import {
   clearNotification,
   setNotification,
@@ -18,7 +19,6 @@ const App = () => {
   useEffect(() => {
     dispatch(initializeBlogs())
   }, [dispatch])
-  const blogs = useSelector(state => state.blogs)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -76,24 +76,6 @@ const App = () => {
     }
   }
 
-  const handleLike = async (id, likes) => {
-    const newblogObject = {
-      likes: likes,
-    }
-    await dispatch(updateBlog(id,newblogObject))
-  }
-  const handleDeleteBlog = async blogToRemove => {
-    try {
-      await dispatch(deleteBlog(blogToRemove.id))
-      showNotification(`Deleted blog "${blogToRemove.title}"`, true, 5000)
-    } catch (error) {
-      showNotification(
-        `could not delete blog "${blogToRemove.title}": ${error.message}`,
-        false,
-        10000
-      )
-    }
-  }
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
     if (loggedUserJSON) {
@@ -125,16 +107,7 @@ const App = () => {
           <Togglable buttonLabel="new blog">
             <BlogForm createBlog={handleCreateBlog} />
           </Togglable>
-
-          {blogs.map(blog => (
-            <Blog
-              key={blog.id}
-              blog={blog}
-              updateLike={handleLike}
-              deleteBlog={handleDeleteBlog}
-              isCurrentUsers={blog.user ? blog.user.id === user.id : false}
-            />
-          ))}
+          <Blogs user={user} />
         </div>
       )}
     </div>
