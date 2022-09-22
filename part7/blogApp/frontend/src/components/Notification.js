@@ -1,4 +1,8 @@
-const Notification = ({ message, isGood }) => {
+import { useSelector } from "react-redux"
+
+const Notification = () => {
+  const { message, isGood } = useSelector(state => state.notification)
+  
   if (message) {
     const notifcationStyle = {
       color: isGood ? 'green' : 'red',

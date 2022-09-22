@@ -6,23 +6,31 @@ import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
+import { useDispatch } from 'react-redux'
+import { initializeBlogs } from './reducers/blogReducer'
+import {
+  clearNotification,
+  setNotification,
+} from './reducers/notificationReducer'
 
 const App = () => {
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(initializeBlogs())
+  }, [dispatch])
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [notifcationMessage, setNotificationMessage] = useState('')
-  const [notifcationIsGood, setNotificationIsGood] = useState(false)
   const [blogs, setBlogs] = useState([])
 
   const showNotification = (message, isGood, timeout) => {
-    setNotificationIsGood(isGood)
-    setNotificationMessage(message)
+    dispatch(setNotification({ message, isGood }))
     setTimeout(() => {
-      setNotificationMessage(null)
+      dispatch(clearNotification())
     }, timeout)
   }
-  const handleLogin = async (event) => {
+  const handleLogin = async event => {
     event.preventDefault()
     try {
       const user = await loginService.login({
@@ -51,7 +59,7 @@ const App = () => {
     setUser(null)
   }
 
-  const handleCreateBlog = async (blogObject) => {
+  const handleCreateBlog = async blogObject => {
     try {
       const returnedBlog = await blogService.create(blogObject)
       setBlogs(blogs.concat(returnedBlog))
@@ -76,7 +84,7 @@ const App = () => {
     }
     await blogService.update(id, newblogObject)
     await setBlogs(
-      blogs.map((b) => {
+      blogs.map(b => {
         if (b.id === id) {
           b.likes = likes
           return b
@@ -88,10 +96,10 @@ const App = () => {
 
     sortBlogsByLikes()
   }
-  const handleDeleteBlog = async (blogToRemove) => {
+  const handleDeleteBlog = async blogToRemove => {
     try {
       await blogService.remove(blogToRemove.id)
-      setBlogs(blogs.filter((b) => b.id !== blogToRemove.id))
+      setBlogs(blogs.filter(b => b.id !== blogToRemove.id))
       showNotification(`Deleted blog "${blogToRemove.title}"`, true, 5000)
     } catch (error) {
       showNotification(
@@ -108,7 +116,7 @@ const App = () => {
   }
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => {
+    blogService.getAll().then(blogs => {
       setBlogs(blogs.sort((a, b) => b.likes - a.likes))
     })
   }, [])
@@ -123,7 +131,7 @@ const App = () => {
 
   return (
     <div>
-      <Notification message={notifcationMessage} isGood={notifcationIsGood} />
+      <Notification />
 
       {user === null ? (
         LoginForm({
@@ -144,7 +152,7 @@ const App = () => {
             <BlogForm createBlog={handleCreateBlog} />
           </Togglable>
 
-          {blogs.map((blog) => (
+          {blogs.map(blog => (
             <Blog
               key={blog.id}
               blog={blog}
