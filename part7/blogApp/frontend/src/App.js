@@ -19,24 +19,6 @@ const App = () => {
   }, [dispatch])
   const user = useSelector(state => state.user)
 
-  // const handleCreateBlog = async blogObject => {
-  //   try {
-  //     const returnedBlog = await dispatch(createBlog(blogObject))
-  //     dispatch(showNotification(
-  //       `a new blog "${returnedBlog.title}" by ${returnedBlog.author} added`,
-  //       true,
-  //       5000
-  //     ))
-  //   } catch (error) {
-  //     dispatch(showNotification(
-  //       `there was an error adding blog: ${error.response.data.error}`,
-  //       false,
-  //       5000
-  //     ))
-  //     throw error //so that the component does not continue
-  //   }
-  // }
-
   return (
     <div>
       <Notification />
@@ -48,10 +30,10 @@ const App = () => {
           <h2>blogs</h2>
           <p>
             {user.name} logged-in
-            <LogoutButton/>
+            <LogoutButton />
           </p>
           <Togglable buttonLabel="new blog">
-            <BlogForm/>
+            <BlogForm />
           </Togglable>
           <Blogs user={user} />
         </div>

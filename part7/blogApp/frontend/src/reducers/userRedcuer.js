@@ -24,7 +24,7 @@ export const initializeUser = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       dispatch(setUser(user))
-      blogService.setToken(user)
+      blogService.setToken(user.token)
     }
   }
 }
@@ -34,7 +34,7 @@ export const loginUser = (credentials) => {
       const user = await loginService.login(credentials)
       window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user))
       dispatch(setUser(user))
-      blogService.setToken(user)
+      blogService.setToken(user.token)
       dispatch(
         showNotification(`${user.name} logged in succefully`, true, 5000)
       )

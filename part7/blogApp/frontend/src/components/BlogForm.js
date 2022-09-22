@@ -1,6 +1,7 @@
 // import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { createBlog } from '../reducers/blogReducer'
+import { showNotification } from '../reducers/notificationReducer'
 const BlogForm = () => {
   // const [title, setTitle] = useState('')
   // const [author, setAuthor] = useState('')
@@ -15,12 +16,25 @@ const BlogForm = () => {
       url: event.target.url.value,
     }
     try {
-      await dispatch(createBlog(blogObject))
-      // setUrl('')
-      // setAuthor('')
-      // setTitle('')
+      const returnedBlog = await dispatch(createBlog(blogObject))
+      dispatch(
+        showNotification(
+          `a new blog "${returnedBlog.title}" by ${returnedBlog.author} added`,
+          true,
+          5000
+        )
+      )
+      event.target.title.value = ''
+      event.target.author.value = ''
+      event.target.url.value = ''
     } catch (error) {
-      //do nothing
+      dispatch(
+        showNotification(
+          `there was an error adding blog: ${error.response.data.error}`,
+          false,
+          5000
+        )
+      )
     }
   }
   return (

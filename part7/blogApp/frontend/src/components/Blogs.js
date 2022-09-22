@@ -3,9 +3,10 @@ import { updateBlog, deleteBlog } from '../reducers/blogReducer'
 import { showNotification } from '../reducers/notificationReducer'
 import Blog from './Blog'
 
-const Blogs = ({ user }) => {
+const Blogs = () => {
   const dispatch = useDispatch()
   const blogs = useSelector(state => state.blogs)
+  const user = useSelector(state => state.user)
   const handleLike = async (id, likes) => {
     const newblogObject = {
       likes: likes,
@@ -34,7 +35,9 @@ const Blogs = ({ user }) => {
       blog={blog}
       updateLike={handleLike}
       deleteBlog={handleDeleteBlog}
-      isCurrentUsers={blog.user ? blog.user.id === user.id : false}
+      isCurrentUsers={
+        blog.user &&  blog.user.id === user.id
+      }
     />
   ))
 }
