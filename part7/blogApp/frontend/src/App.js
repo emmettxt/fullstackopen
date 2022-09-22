@@ -1,102 +1,52 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import Blogs from './components/Blogs'
 
-import blogService from './services/blogs'
-import loginService from './services/login'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { createBlog, initializeBlogs } from './reducers/blogReducer'
 import {
-  clearNotification,
-  setNotification,
+  showNotification,
 } from './reducers/notificationReducer'
+import { initializeUser, logoutUser } from './reducers/userRedcuer'
 
 const App = () => {
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(initializeBlogs())
+    dispatch(initializeUser())
   }, [dispatch])
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
-
-  const showNotification = (message, isGood, timeout) => {
-    dispatch(setNotification({ message, isGood }))
-    setTimeout(() => {
-      dispatch(clearNotification())
-    }, timeout)
-  }
-  const handleLogin = async event => {
-    event.preventDefault()
-    try {
-      const user = await loginService.login({
-        username,
-        password,
-      })
-      window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user))
-      blogService.setToken(user.token)
-      setUser(user)
-      setUsername('')
-      setPassword('')
-      showNotification(`${user.name} logged in succefully`, true, 5000)
-    } catch (error) {
-      console.log(error)
-      showNotification(
-        'There was an error logging in, ' + error.response.data.error,
-        false,
-        5000
-      )
-    }
-  }
-
+  const user = useSelector(state => state.user)
   const handleLogout = () => {
-    window.localStorage.removeItem('loggedBlogAppUser')
-    blogService.setToken(null)
-    setUser(null)
+    dispatch(logoutUser())
   }
 
   const handleCreateBlog = async blogObject => {
     try {
       const returnedBlog = await dispatch(createBlog(blogObject))
-      showNotification(
+      dispatch(showNotification(
         `a new blog "${returnedBlog.title}" by ${returnedBlog.author} added`,
         true,
         5000
-      )
+      ))
     } catch (error) {
-      showNotification(
+      dispatch(showNotification(
         `there was an error adding blog: ${error.response.data.error}`,
         false,
         5000
-      )
+      ))
       throw error //so that the component does not continue
     }
   }
-
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
-    }
-  }, [])
 
   return (
     <div>
       <Notification />
 
       {user === null ? (
-        LoginForm({
-          username,
-          password,
-          handleLogin,
-          setUsername,
-          setPassword,
-        })
+        <LoginForm />
       ) : (
         <div>
           <h2>blogs</h2>
