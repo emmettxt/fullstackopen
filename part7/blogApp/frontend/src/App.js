@@ -6,8 +6,8 @@ import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
-import { useDispatch } from 'react-redux'
-import { initializeBlogs } from './reducers/blogReducer'
+import { useDispatch, useSelector } from 'react-redux'
+import { createBlog, deleteBlog, initializeBlogs, updateBlog } from './reducers/blogReducer'
 import {
   clearNotification,
   setNotification,
@@ -18,11 +18,10 @@ const App = () => {
   useEffect(() => {
     dispatch(initializeBlogs())
   }, [dispatch])
-
+  const blogs = useSelector(state => state.blogs)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [blogs, setBlogs] = useState([])
 
   const showNotification = (message, isGood, timeout) => {
     dispatch(setNotification({ message, isGood }))
@@ -61,8 +60,7 @@ const App = () => {
 
   const handleCreateBlog = async blogObject => {
     try {
-      const returnedBlog = await blogService.create(blogObject)
-      setBlogs(blogs.concat(returnedBlog))
+      const returnedBlog = await dispatch(createBlog(blogObject))
       showNotification(
         `a new blog "${returnedBlog.title}" by ${returnedBlog.author} added`,
         true,
@@ -82,24 +80,11 @@ const App = () => {
     const newblogObject = {
       likes: likes,
     }
-    await blogService.update(id, newblogObject)
-    await setBlogs(
-      blogs.map(b => {
-        if (b.id === id) {
-          b.likes = likes
-          return b
-        } else {
-          return b
-        }
-      })
-    )
-
-    sortBlogsByLikes()
+    await dispatch(updateBlog(id,newblogObject))
   }
   const handleDeleteBlog = async blogToRemove => {
     try {
-      await blogService.remove(blogToRemove.id)
-      setBlogs(blogs.filter(b => b.id !== blogToRemove.id))
+      await dispatch(deleteBlog(blogToRemove.id))
       showNotification(`Deleted blog "${blogToRemove.title}"`, true, 5000)
     } catch (error) {
       showNotification(
@@ -109,17 +94,6 @@ const App = () => {
       )
     }
   }
-
-  const sortBlogsByLikes = () => {
-    const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
-    setBlogs(sortedBlogs)
-  }
-
-  useEffect(() => {
-    blogService.getAll().then(blogs => {
-      setBlogs(blogs.sort((a, b) => b.likes - a.likes))
-    })
-  }, [])
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
     if (loggedUserJSON) {
