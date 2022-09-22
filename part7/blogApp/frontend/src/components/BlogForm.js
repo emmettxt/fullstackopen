@@ -1,21 +1,24 @@
-import { useState } from 'react'
-const BlogForm = ({ createBlog }) => {
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+// import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { createBlog } from '../reducers/blogReducer'
+const BlogForm = () => {
+  // const [title, setTitle] = useState('')
+  // const [author, setAuthor] = useState('')
+  // const [url, setUrl] = useState('')
+  const dispatch = useDispatch()
   const addBlog = async event => {
     event.preventDefault()
 
     const blogObject = {
-      title: title,
-      author: author,
-      url: url,
+      title: event.target.title.value,
+      author: event.target.author.value,
+      url: event.target.url.value,
     }
     try {
-      await createBlog(blogObject)
-      setUrl('')
-      setAuthor('')
-      setTitle('')
+      await dispatch(createBlog(blogObject))
+      // setUrl('')
+      // setAuthor('')
+      // setTitle('')
     } catch (error) {
       //do nothing
     }
@@ -27,27 +30,27 @@ const BlogForm = ({ createBlog }) => {
         title
         <input
           type="text"
-          value={title}
+          // value={title}
           name="title"
-          onChange={({ target }) => setTitle(target.value)}
+          // onChange={({ target }) => setTitle(target.value)}
         />
       </div>
       <div>
         author
         <input
           type="text"
-          value={author}
+          // value={author}
           name="author"
-          onChange={({ target }) => setAuthor(target.value)}
+          // onChange={({ target }) => setAuthor(target.value)}
         />
       </div>
       <div>
         url
         <input
           type="text"
-          value={url}
+          // value={url}
           name="url"
-          onChange={({ target }) => setUrl(target.value)}
+          // onChange={({ target }) => setUrl(target.value)}
         />
       </div>
       <button type="submit">create</button>
