@@ -7,10 +7,11 @@ import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
-import LogoutButton from './components/LogoutButton'
+// import LogoutButton from './components/LogoutButton'
 import Users from './components/Users'
 import UserPage from './components/UserPage'
 import BlogPage from './components/BlogPage'
+import NavigationMenu from './components/NavigationMenu'
 
 import { initializeBlogs } from './reducers/blogReducer'
 import { initializeUser } from './reducers/userRedcuer'
@@ -52,15 +53,12 @@ const App = () => {
         <LoginForm />
       ) : (
         <div>
+          <NavigationMenu/>
           <h2>blogs</h2>
-          <p>
+          {/* <p>
             {user.name} logged-in
             <LogoutButton />
-          </p>
-          {/* <Togglable buttonLabel="new blog">
-            <BlogForm />
-          </Togglable>
-          <Blogs user={user} /> */}
+          </p> */}
           <AppRoutes />
         </div>
       )}
