@@ -51,7 +51,7 @@ blogRouter.put('/:id', async (req, res) => {
   }
   const updatedBlog = await Blog.findByIdAndUpdate(req.params.id, blog, {
     new: true,
-  })
+  }).populate('user', { username: 1, name: 1 })
   res.json(updatedBlog)
 })
 module.exports = blogRouter

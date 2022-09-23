@@ -10,10 +10,10 @@ import Togglable from './components/Togglable'
 import LogoutButton from './components/LogoutButton'
 import Users from './components/Users'
 import UserPage from './components/UserPage'
+import BlogPage from './components/BlogPage'
 
 import { initializeBlogs } from './reducers/blogReducer'
 import { initializeUser } from './reducers/userRedcuer'
-
 const AppRoutes = () => {
   const user = useSelector(state => state.user)
   return (
@@ -30,7 +30,8 @@ const AppRoutes = () => {
         }
       />
       <Route path="/users" element={<Users />} />
-      <Route path="/users/:id" element={<UserPage/>} />
+      <Route path="/users/:id" element={<UserPage />} />
+      <Route path="/blogs/:id" element={<BlogPage />} />
     </Routes>
   )
 }

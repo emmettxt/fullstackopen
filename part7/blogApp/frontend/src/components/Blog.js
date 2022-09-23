@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Proptypes from 'prop-types'
+import { Link } from 'react-router-dom'
 
 const Blog = ({ blog, updateLike, deleteBlog, isCurrentUsers }) => {
   const [isExpanded, setIsExpaned] = useState(false)
@@ -29,7 +30,10 @@ const Blog = ({ blog, updateLike, deleteBlog, isCurrentUsers }) => {
   return (
     <div style={blogStyle} className="blog">
       <div>
-        {blog.title} {blog.author}
+        <Link to={`/blogs/${blog.id}`}>
+          {blog.title} {blog.author}{' '}
+        </Link>
+
         <button onClick={toggleExpand}>{isExpanded ? 'hide' : 'view'}</button>
       </div>
       <div style={showWhenExpanded}>
