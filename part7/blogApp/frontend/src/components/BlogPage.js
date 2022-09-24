@@ -36,6 +36,16 @@ const BlogPage = () => {
             </button>
           </div>
           <div>added by {thisBlog.user ? thisBlog.user.name : null}</div>
+          {thisBlog.comments.length>0 && (
+            <div>
+              <h3>comments</h3>
+              <ul>
+                {thisBlog.comments.map((comment, index) => (
+                  <li key={index}>{comment}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       )
     }
