@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams, useNavigate } from 'react-router-dom'
-import { updateBlog } from '../reducers/blogReducer'
+import { replaceBlog, updateBlog } from '../reducers/blogReducer'
+import blogService from '../services/blogs'
 
 const BlogPage = () => {
   const params = useParams()
@@ -13,6 +14,13 @@ const BlogPage = () => {
       likes: blog.likes + 1,
     }
     await dispatch(updateBlog(blog.id, newBlog))
+  }
+  const addComment = async event => {
+    event.preventDefault()
+    const response = await blogService.addComment(id,event.target.comment.value)
+    await dispatch(replaceBlog(response))
+    event.target.comment.value =''
+
   }
   if (!blogs) {
     navigate('/')
@@ -36,16 +44,19 @@ const BlogPage = () => {
             </button>
           </div>
           <div>added by {thisBlog.user ? thisBlog.user.name : null}</div>
-          {thisBlog.comments.length>0 && (
-            <div>
-              <h3>comments</h3>
-              <ul>
-                {thisBlog.comments.map((comment, index) => (
-                  <li key={index}>{comment}</li>
-                ))}
-              </ul>
-            </div>
-          )}
+
+          <div>
+            <h3>comments</h3>
+            <form onSubmit={addComment}>
+              <input type="text" name="comment"></input>
+              <button type="submit">add comment</button>
+            </form>
+            <ul>
+              {thisBlog.comments.map((comment, index) => (
+                <li key={index}>{comment}</li>
+              ))}
+            </ul>
+          </div>
         </div>
       )
     }
