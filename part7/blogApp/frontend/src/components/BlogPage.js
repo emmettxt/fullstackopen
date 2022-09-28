@@ -1,3 +1,4 @@
+import { Col, Row, Button, Card, Form } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams, useNavigate } from 'react-router-dom'
 import { replaceBlog, updateBlog } from '../reducers/blogReducer'
@@ -17,10 +18,13 @@ const BlogPage = () => {
   }
   const addComment = async event => {
     event.preventDefault()
-    const response = await blogService.addComment(id,event.target.comment.value)
+    console.log('addComment called')
+    const response = await blogService.addComment(
+      id,
+      event.target.comment.value
+    )
     await dispatch(replaceBlog(response))
-    event.target.comment.value =''
-
+    event.target.comment.value = ''
   }
   if (!blogs) {
     navigate('/')
@@ -30,34 +34,48 @@ const BlogPage = () => {
       navigate('/')
     } else {
       return (
-        <div>
-          <h1>{thisBlog.title}</h1>
-          <a href={thisBlog.url}>{thisBlog.url}</a>
-          <div>
-            {thisBlog.likes} likes{' '}
-            <button
-              onClick={() => {
-                handleLike(thisBlog)
-              }}
-            >
-              like
-            </button>
-          </div>
-          <div>added by {thisBlog.user ? thisBlog.user.name : null}</div>
+        <Card>
+          <Card.Body>
+            <Card.Title>{thisBlog.title}</Card.Title>
+            <a href={thisBlog.url}>{thisBlog.url}</a>
 
-          <div>
-            <h3>comments</h3>
-            <form onSubmit={addComment}>
-              <input type="text" name="comment"></input>
-              <button type="submit">add comment</button>
-            </form>
-            <ul>
-              {thisBlog.comments.map((comment, index) => (
-                <li key={index}>{comment}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
+            <div>
+              {thisBlog.likes} likes{' '}
+              <Button
+                onClick={() => {
+                  handleLike(thisBlog)
+                }}
+              >
+                like
+              </Button>
+            </div>
+            <div>added by {thisBlog.user ? thisBlog.user.name : null}</div>
+            <Card.Footer>
+              <Card.Subtitle>comments</Card.Subtitle>
+
+              <ul>
+                {thisBlog.comments.map((comment, index) => (
+                  <li key={index}>{comment}</li>
+                ))}
+              </ul>
+              <Form onSubmit={addComment}>
+                <Row>
+                  <Col sm={9}>
+                    <Form.Control
+                      type="text"
+                      placeholder="Add Comment..."
+                      name="comment"
+                    />
+                  </Col>
+
+                  <Button type="submit" className="col-sm-3">
+                    add comment
+                  </Button>
+                </Row>
+              </Form>
+            </Card.Footer>
+          </Card.Body>
+        </Card>
       )
     }
   }

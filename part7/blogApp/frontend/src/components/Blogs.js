@@ -2,6 +2,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { updateBlog, deleteBlog } from '../reducers/blogReducer'
 import { showNotification } from '../reducers/notificationReducer'
 import Blog from './Blog'
+import { Accordion } from 'react-bootstrap'
 
 const Blogs = () => {
   const dispatch = useDispatch()
@@ -29,17 +30,19 @@ const Blogs = () => {
       )
     }
   }
-  return blogs.map(blog => (
-    <Blog
-      key={blog.id}
-      blog={blog}
-      updateLike={handleLike}
-      deleteBlog={handleDeleteBlog}
-      isCurrentUsers={
-        blog.user &&  blog.user.id === user.id
-      }
-    />
-  ))
+  return (
+    <Accordion alwaysOpen>
+      {blogs.map(blog => (
+      <Blog
+        key={blog.id}
+        blog={blog}
+        updateLike={handleLike}
+        deleteBlog={handleDeleteBlog}
+        isCurrentUsers={blog.user && blog.user.id === user.id}
+      />
+      ))}
+    </Accordion>
+  )
 }
 
 export default Blogs

@@ -1,3 +1,4 @@
+import { Button, Form } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { loginUser } from '../reducers/userRedcuer'
@@ -11,34 +12,27 @@ const LoginForm = () => {
       username: event.target.username.value,
       password: event.target.password.value,
     }
-    await dispatch(
-      loginUser(credentials)
-    )
+    await dispatch(loginUser(credentials))
     navigate('/')
   }
   return (
-    <form onSubmit={handleLogin} id="login-form">
-      <div>
-        <h1>log in to application</h1>
-        username
-        <input
-          type="text"
-          // value={username}
-          name="username"
-          // onChange={({ target }) => setUsername(target.value)}
-        />
-      </div>
-      <div>
-        password
-        <input
-          type="password"
-          // value={password}
-          name="password"
-          // onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button type="submit">login</button>
-    </form>
+    <Form onSubmit={handleLogin} id="login-form" className="col-lg-4 col-md-6 col-sm-8 col-s-10 mx-auto row">
+      <h1>log in to application</h1>
+      <Form.Group>
+        <Form.Label>username</Form.Label>
+        <Form.Control type="text" name="username" />
+      </Form.Group>
+      <Form.Group>
+        <Form.Label>password</Form.Label>
+        <Form.Control type="password" name="password" />
+      </Form.Group>
+        <div className="d-flex justify-content-end">
+
+          <Button type="submit" className="col-md-4">
+            login
+          </Button>
+        </div>
+    </Form>
   )
 }
 export default LoginForm

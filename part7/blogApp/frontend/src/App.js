@@ -15,6 +15,7 @@ import NavigationMenu from './components/NavigationMenu'
 
 import { initializeBlogs } from './reducers/blogReducer'
 import { initializeUser } from './reducers/userRedcuer'
+import { Col ,Container} from 'react-bootstrap'
 const AppRoutes = () => {
   const user = useSelector(state => state.user)
   return (
@@ -46,21 +47,18 @@ const App = () => {
   const user = useSelector(state => state.user)
 
   return (
-    <div>
+    <div className="container">
       <Notification />
 
       {user === null ? (
         <LoginForm />
       ) : (
-        <div>
-          <NavigationMenu/>
-          <h2>blogs</h2>
-          {/* <p>
-            {user.name} logged-in
-            <LogoutButton />
-          </p> */}
-          <AppRoutes />
-        </div>
+        <Container>
+          <NavigationMenu />
+          <Col md={6} className="mx-auto">
+            <AppRoutes />
+          </Col>
+        </Container>
       )}
     </div>
   )

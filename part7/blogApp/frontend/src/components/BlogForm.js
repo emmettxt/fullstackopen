@@ -2,10 +2,9 @@
 import { useDispatch } from 'react-redux'
 import { createBlog } from '../reducers/blogReducer'
 import { showNotification } from '../reducers/notificationReducer'
+
+import { Form, Button, Row, Col } from 'react-bootstrap'
 const BlogForm = () => {
-  // const [title, setTitle] = useState('')
-  // const [author, setAuthor] = useState('')
-  // const [url, setUrl] = useState('')
   const dispatch = useDispatch()
   const addBlog = async event => {
     event.preventDefault()
@@ -38,37 +37,48 @@ const BlogForm = () => {
     }
   }
   return (
-    <form onSubmit={addBlog} id="BlogForm">
-      <h1>create new</h1>
-      <div>
-        title
-        <input
-          type="text"
-          // value={title}
-          name="title"
-          // onChange={({ target }) => setTitle(target.value)}
-        />
-      </div>
-      <div>
-        author
-        <input
-          type="text"
-          // value={author}
-          name="author"
-          // onChange={({ target }) => setAuthor(target.value)}
-        />
-      </div>
-      <div>
-        url
-        <input
-          type="text"
-          // value={url}
-          name="url"
-          // onChange={({ target }) => setUrl(target.value)}
-        />
-      </div>
-      <button type="submit">create</button>
-    </form>
+    <Form onSubmit={addBlog} id="BlogForm" className="col-md-10">
+      <Form.Group as={Row} className="mb-3" controlId="title">
+        <Form.Label column sm={3}>
+          blog title
+        </Form.Label>
+        <Col sm={9}>
+          <Form.Control
+            type="text"
+            placeholder="Enter Blog Title"
+            name="title"
+          />
+        </Col>
+      </Form.Group>
+      <Form.Group as={Row} className="mb-3" controlId="author">
+        <Form.Label column sm={3}>
+          author
+        </Form.Label>
+        <Col sm={9}>
+          <Form.Control
+            type="text"
+            placeholder="Enter Blog Author"
+            name="author"
+          />
+        </Col>
+      </Form.Group>
+
+      <Form.Group as={Row} className="mb-3" controlId="url">
+        <Form.Label className="col-sm-3">url</Form.Label>
+        <Col>
+          <Form.Control
+            type="text"
+            placeholder="Enter Blog URL"
+            name="url"
+            className="col-sm-9"
+          />
+        </Col>
+      </Form.Group>
+
+      <Form.Group className="mb-3" controlId="createButton">
+        <Button type="submit">create</Button>
+      </Form.Group>
+    </Form>
   )
 }
 

@@ -1,3 +1,4 @@
+import { ListGroup, ListGroupItem } from 'react-bootstrap'
 import { useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -18,12 +19,12 @@ const UserPage = () => {
       return (
         <div>
           <h2>{thisUser.name}</h2>
+          <ListGroup>
           <h3>added blogs</h3>
-          <ul>
             {thisUser.blogs.map(blog => (
-              <li key={blog.id}>{blog.title}</li>
+              <ListGroupItem key={blog.id}>{blog.title}</ListGroupItem>
             ))}
-          </ul>
+          </ListGroup>
         </div>
       )
     }
