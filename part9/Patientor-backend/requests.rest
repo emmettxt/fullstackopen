@@ -1,0 +1,46 @@
+###
+POST http://localhost:3001/api/patients/d2773336-f723-11e9-8f0b-362b9e155667/entries
+content-type: application/json
+
+{
+  "description":"descriptionTest",
+  "date": "1986-07-09",
+  "specialist": "Emmet Moore",
+  "type":"Hospital",
+  "discharge":{"date":"2020-01-01","criteria":"he just left"}
+}
+
+###
+POST http://localhost:3001/api/patients/d2773336-f723-11e9-8f0b-362b9e155667/entries
+content-type: application/json
+
+{
+  "description":"descriptionTest",
+  "date": "1986-07-09",
+  "specialist": "Emmet Moore",
+  "type":"HealthCheck",
+  "healthCheckRating":2
+  "diagnosisCodes":["M51.2"]
+}
+
+
+###
+POST http://localhost:3001/api/patients/d2773336-f723-11e9-8f0b-362b9e155667/entries
+content-type: application/json
+
+{
+  "description":"descriptionTest",
+  "date": "1986-07-09",
+  "specialist": "Emmet Moore",
+  "type":"OccupationalHealthcare",
+  "employerName":"NYPD",
+  "sickLeave":{"startDate":"2022-01-01","endDate":"2022-05-01"}
+}
+
+
+###
+GET http://localhost:3001/api/patients/
+
+
+###
+GET http://localhost:3001/api/patients/d2773336-f723-11e9-8f0b-362b9e155667

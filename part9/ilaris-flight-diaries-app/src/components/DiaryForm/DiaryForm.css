@@ -1,0 +1,13 @@
+.diary-form {
+  display: grid;
+  grid-auto-flow: row;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.diary-form > button {
+  max-width: fit-content;
+  padding-inline: 2rem;
+  padding-block: 0;
+  max-height: min-content;
+  margin-left: auto;
+}
